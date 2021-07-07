@@ -1,0 +1,17 @@
+function EEGstruct=define_structure_gtec(name,subj,Data,timet)
+EEGstruct=eeg_emptyset();
+EEGstruct.setname=name;
+EEGstruct.filename='gtec_EEG.mat';
+EEGstruct.filepath='gtec_EEG.mat';
+EEGstruct.subject=subj;
+EEGstruct.nbchan=size(Data,1);
+EEGstruct.trials=1;
+EEGstruct.pnts=size(Data,2);
+EEGstruct.srate=2000;
+EEGstruct.xmin=timet(1);
+EEGstruct.xmax=timet(end);
+EEGstruct.times=timet;
+EEGstruct.data=Data;
+EEGstruct.ref='common';
+EEGstruct=pop_editset(EEGstruct,'chanlocs','pos_loc_gtec.loc','icaweights',[]);
+EEGstruct.chanlocs=readlocs('pos_loc_gtec.loc');
