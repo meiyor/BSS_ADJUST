@@ -1,7 +1,7 @@
 function addMaterEEGdataEEGlab_bouts(subj,runind,size_resamp,sel_emg)
 %% add the EEGlab path here to employ EEG signal preprocessing
-%addpath(genpath('/home/jmm_vivobook_asus/DeepGaze_project/eeglab14_1_1b'));
-%rmpath('/home/jmm_vivobook_asus/DeepGaze_project/eeglab14_1_1b');
+%addpath(genpath('/home/jmm_vivobook_asus/DeepGaze_project/eeglab14_1_1b')); %% add path eeglab
+%rmdpath('/home/jmm_vivobook_asus/DeepGaze_project/eeglab14_1_1b/field_trip/'); %% remove field_trip
 ind=0;
 ccount=1;
 ckcount=1;
