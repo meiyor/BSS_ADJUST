@@ -192,7 +192,22 @@ while ind==0
     if ~isreal(EEGR_set{ccount}.data(:,:))
       EEGR_set{ccount}.data(:,:)=real(EEGR_set{ccount}.data(:,:));
     end;
-         
+    
+    if isinf(EEGL_set{ccount}.data(:,:))
+      EEGL_set{ccount}.data(:,:)=0;
+    end;
+    if isinf(EEGR_set{ccount}.data(:,:))
+      EEGR_set{ccount}.data(:,:)=0;
+    end;     
+    
+    if isnan(EEGL_set{ccount}.data(:,:))
+      EEGL_set{ccount}.data(:,:)=0;
+    end;
+    if isnan(EEGR_set{ccount}.data(:,:))
+      EEGR_set{ccount}.data(:,:)=0;
+    end;   
+    
+    
     for ch=1:32
               close all;
               [erspl{ccount,ch},itcpl{ccount,ch},powbasel{ccount,ch},timescl{ccount,ch},freql{ccount,ch}]=newtimef(EEGL_set{ccount}.data(ch,:),EEGL_set{ccount}.pnts,[EEGL_set{ccount}.xmin EEGL_set{ccount}.xmax]*1000,EEGL_set{ccount}.srate,0,'winsize',50,'nfreqs',1000,'freqs',[0 50],'padratio',32,'plotersp','off','plotitc','off');
@@ -296,6 +311,7 @@ while ind==0
          EEGR_set{ccount}=[];
      end;
      ckcount=ckcount+1;
+     ckcount
 end;
 save([subj '_' runind '_res_vals.mat'],'erspl','itcpl','freql','erspr','itcpr','freqr','tl','tr','accel','thl','thr','tpl','tpr');
 save([subj '_' runind '_res_coherence.mat'],'coh_SO_L','coh_SO_R','coh_ST_L','coh_ST_R','coh_TA_L','coh_TA_R','coh_RF_L','coh_RF_R','coh_SO_Ls','coh_SO_Rs','coh_ST_Ls','coh_ST_Rs','coh_TA_Ls','coh_TA_Rs','coh_RF_Ls','coh_RF_Rs','PL1','PR1','PL2_SO','PR2_SO','PL2_ST','PR2_ST','PL2_RF','PR2_RF','PL3_SO','PR3_SO','PL3_ST','PR3_ST','PL3_TA','PR3_TA','PL3_RF','PR3_RF');
