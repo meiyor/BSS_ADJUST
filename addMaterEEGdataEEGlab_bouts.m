@@ -149,8 +149,8 @@ while ind==0
          end;
 
          
-         [EEGL_set{ccount}.icaweights,EEGL_set{ccount}.icasphere]=runica(EEGL_set{ccount}.data(:,:),'sphering','on','lrate',1e-5,'maxsteps',100,'reset_randomseed','off'); 
-         [EEGR_set{ccount}.icaweights,EEGR_set{ccount}.icasphere]=runica(EEGR_set{ccount}.data(:,:),'sphering','on','lrate',1e-5,'maxsteps',100,'reset_randomseed','off'); 
+         [EEGL_set{ccount}.icaweights,EEGL_set{ccount}.icasphere]=runica(EEGL_set{ccount}.data(:,:),'sphering','on','lrate',1e-5,'maxsteps',150,'reset_randomseed','off'); 
+         [EEGR_set{ccount}.icaweights,EEGR_set{ccount}.icasphere]=runica(EEGR_set{ccount}.data(:,:),'sphering','on','lrate',1e-5,'maxsteps',150,'reset_randomseed','off'); 
          delete('report_left_n.txt');
          delete('report_right_n.txt');
          %% implement ADJUST here
@@ -207,6 +207,13 @@ while ind==0
       EEGR_set{ccount}.data(:,:)=0;
     end;   
     
+    if any(any((EEGL_set{ccount}.data(:,:)==0)))
+         EEGL_set{ccount}.data(EEGL_set{ccount}.data(:,:)==0)=0.01;
+    end;
+    
+    if any(any((EEGR_set{ccount}.data(:,:)==0)))
+         EEGR_set{ccount}.data(EEGR_set{ccount}.data(:,:)==0)=0.01;
+    end;
     
     for ch=1:32
               close all;

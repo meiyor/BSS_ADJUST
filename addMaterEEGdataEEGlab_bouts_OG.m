@@ -196,9 +196,19 @@ while ind==0
                 if any(any(isnan(EEGL_set{ccount}.data(:,:))))
                   EEGL_set{ccount}.data(:,:)=0;
                 end;
+                
                 if any(any(isnan(EEGR_set{ccount}.data(:,:))))
                   EEGR_set{ccount}.data(:,:)=0;
                 end;   
+                
+                 
+                if any(any((EEGL_set{ccount}.data(:,:)==0)))
+                     EEGL_set{ccount}.data(EEGL_set{ccount}.data(:,:)==0)=0.01;
+                end;
+
+                if any(any((EEGR_set{ccount}.data(:,:)==0)))
+                     EEGR_set{ccount}.data(EEGR_set{ccount}.data(:,:)==0)=0.01;
+                end;
               
               [erspl{ccount,ch},itcpl{ccount,ch},powbasel{ccount,ch},timescl{ccount,ch},freql{ccount,ch}]=newtimef(EEGL_set{ccount}.data(ch,:).^2,EEGL_set{ccount}.pnts,[EEGL_set{ccount}.xmin EEGL_set{ccount}.xmax]*1000,EEGL_set{ccount}.srate,0,'winsize',50,'nfreqs',1000,'freqs',[0 50],'padratio',32,'plotersp','off','plotitc','off');
               [erspr{ccount,ch},itcpr{ccount,ch},powbaser{ccount,ch},timescr{ccount,ch},freqr{ccount,ch}]=newtimef(EEGR_set{ccount}.data(ch,:).^2,EEGR_set{ccount}.pnts,[EEGR_set{ccount}.xmin EEGR_set{ccount}.xmax]*1000,EEGR_set{ccount}.srate,0,'winsize',50,'nfreqs',1000,'freqs',[0 50],'padratio',32,'plotersp','off','plotitc','off');
