@@ -186,17 +186,17 @@ while ind==0
                   EEGR_set{ccount}.data(ch,:)=real(EEGR_set{ccount}.data(ch,:));
               end;
               
-              if isinf(EEGL_set{ccount}.data(:,:))
+              if any(any(isinf(EEGL_set{ccount}.data(:,:))))
                   EEGL_set{ccount}.data(:,:)=0;
                 end;
-                if isinf(EEGR_set{ccount}.data(:,:))
+                if any(any(isinf(EEGR_set{ccount}.data(:,:))))
                   EEGR_set{ccount}.data(:,:)=0;
                 end;     
 
-                if isnan(EEGL_set{ccount}.data(:,:))
+                if any(any(isnan(EEGL_set{ccount}.data(:,:))))
                   EEGL_set{ccount}.data(:,:)=0;
                 end;
-                if isnan(EEGR_set{ccount}.data(:,:))
+                if any(any(isnan(EEGR_set{ccount}.data(:,:))))
                   EEGR_set{ccount}.data(:,:)=0;
                 end;   
               
