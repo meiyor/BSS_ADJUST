@@ -24,8 +24,8 @@ while ind==0
      EEGR_set{ccount}=EEGlabstructure_def(EEGR,EEG{ccount}{2,2}',EEG{ccount}{4,2},EEG{ccount}{6,2},EEG{ccount}{1,2},subj,runind);
      
      if indbout==0
-         EEGL_set{ccount} = pop_eegfiltnew(EEGL_set{ccount},0.1,100,8250);
-         EEGR_set{ccount} = pop_eegfiltnew(EEGR_set{ccount},0.1,100,8250);
+         EEGL_set{ccount} = pop_eegfiltnew(EEGL_set{ccount},2.1,100,8250);
+         EEGR_set{ccount} = pop_eegfiltnew(EEGR_set{ccount},2.1,100,8250);
          for k=1:32
                     t_data=conv((1/2)*ones([1 2]),EEGL_set{ccount}.data(k,:));
                     t_data=detrend(t_data);
@@ -35,12 +35,13 @@ while ind==0
                     EEGR_set{ccount}.data(k,:)=t_data(2/2:EEGR_set{ccount}.pnts+(2/2-1));
          end;
          
+         
          baseline_channame_L={EEGL_set{ccount}.chanlocs(:).labels};
          baseline_chanloc_L=EEGL_set{ccount}.chanlocs;
          
          baseline_channame_R={EEGR_set{ccount}.chanlocs(:).labels};
          baseline_chanloc_R=EEGR_set{ccount}.chanlocs;
-         
+                  
          EEGL_set{ccount}=pop_autobssemg(EEGL_set{ccount},1,1,'bsscca',{'eigratio',1e6},'emg_psd',{'ratio',10,'fs',250,'range',[1 10]});
          EEGR_set{ccount}=pop_autobssemg(EEGR_set{ccount},1,1,'bsscca',{'eigratio',1e6},'emg_psd',{'ratio',10,'fs',250,'range',[1 10]});
          EEGL_set{ccount}=clean_rawdata(EEGL_set{ccount},5,[0.25 0.75],0.85,-1,-1,-1);
@@ -214,8 +215,47 @@ while ind==0
     if any(any((EEGR_set{ccount}.data(:,:)==0)))
          EEGR_set{ccount}.data(EEGR_set{ccount}.data(:,:)==0)=0.01;
     end;
-    
-    for ch=1:32
+%     
+%     EEGL_set{ccount}.data((EEGL_set{ccount}.data(:,:)>=50))=20; %% mesmerizing amplitude
+%     EEGR_set{ccount}.data((EEGR_set{ccount}.data(:,:)>=50))=20; %% mesmerizing amplitude 
+%          
+%     EEGL_set{ccount}.data((EEGL_set{ccount}.data(:,:)<=-50))=-20; %% mesmerizing amplitude
+%     EEGR_set{ccount}.data((EEGR_set{ccount}.data(:,:)<=-50))=-20; %% mesmerizing amplitude 
+     k_channels_L=[];
+     k_channels_R=[];
+     cl=1;
+     cr=1;
+     for k=1:32
+         %% control amplitude some channels represent an artifact
+                    indicator_L=0;
+                    indicator_R=0;
+                    if any(EEGL_set{ccount}.data(k,:)>=100)
+                        %EEGL_set{ccount}.data(k,:)=0.01;
+                        indicator_L=1;
+                    end;
+                    if any(EEGR_set{ccount}.data(k,:)>=100)
+                        %EEGR_set{ccount}.data(k,:)=0.01;
+                        indicator_R=1;
+                    end;
+                    if any(EEGL_set{ccount}.data(k,:)<=-100)
+                        %EEGL_set{ccount}.data(k,:)=-0.01;
+                        indicator_L=1;
+                    end;
+                    if any(EEGR_set{ccount}.data(k,:)<=-100)
+                        %EEGR_set{ccount}.data(k,:)=-0.01;
+                        indicator_R=1;
+                    end;
+               if indicator_L==1
+                   k_channels_L(cl)=k;
+                   cl=cl+1;
+               end;
+               if indicator_R==1
+                   k_channels_R(cr)=k;
+                   cr=cr+1;
+               end;
+    end;
+         
+        for ch=1:32
               close all;
               [erspl{ccount,ch},itcpl{ccount,ch},powbasel{ccount,ch},timescl{ccount,ch},freql{ccount,ch}]=newtimef(EEGL_set{ccount}.data(ch,:),EEGL_set{ccount}.pnts,[EEGL_set{ccount}.xmin EEGL_set{ccount}.xmax]*1000,EEGL_set{ccount}.srate,0,'winsize',50,'nfreqs',1000,'freqs',[0 50],'padratio',32,'plotersp','off','plotitc','off');
               [erspr{ccount,ch},itcpr{ccount,ch},powbaser{ccount,ch},timescr{ccount,ch},freqr{ccount,ch}]=newtimef(EEGR_set{ccount}.data(ch,:),EEGR_set{ccount}.pnts,[EEGR_set{ccount}.xmin EEGR_set{ccount}.xmax]*1000,EEGR_set{ccount}.srate,0,'winsize',50,'nfreqs',1000,'freqs',[0 50],'padratio',32,'plotersp','off','plotitc','off');
@@ -252,10 +292,22 @@ while ind==0
                   SL2_RF{ccount,ch}=imresize(SL2_RF{ccount,ch},size_resamp);
                   SR2_RF{ccount,ch}=imresize(SR2_RF{ccount,ch},size_resamp);                  
               end;
-              erspl{ccount,ch}=imresize(erspl{ccount,ch},size_resamp);
-              erspr{ccount,ch}=imresize(erspr{ccount,ch},size_resamp);
-              itcpl{ccount,ch}=imresize(itcpl{ccount,ch},size_resamp);
-              itcpr{ccount,ch}=imresize(itcpr{ccount,ch},size_resamp);
+              if any(ch==k_channels_L)
+                  erspl{ccount,ch}=zeros(size_resamp);
+                  erspr{ccount,ch}=zeros(size_resamp);
+                  itcpl{ccount,ch}=zeros(size_resamp);
+                  itcpr{ccount,ch}=zeros(size_resamp);
+              elseif any(ch==k_channels_R)
+                  erspl{ccount,ch}=zeros(size_resamp);
+                  erspr{ccount,ch}=zeros(size_resamp);
+                  itcpl{ccount,ch}=zeros(size_resamp);
+                  itcpr{ccount,ch}=zeros(size_resamp);
+              else
+                  erspl{ccount,ch}=imresize(erspl{ccount,ch},size_resamp);
+                  erspr{ccount,ch}=imresize(erspr{ccount,ch},size_resamp);
+                  itcpl{ccount,ch}=imresize(itcpl{ccount,ch},size_resamp);
+                  itcpr{ccount,ch}=imresize(itcpr{ccount,ch},size_resamp);
+              end;
          end;
          if sel_emg==1
               [PL3_SO{ccount},fL3_SO{ccount}]=pwelch(EMG_sal{ccount}{1,1}./max(EMG_sal{ccount}{1,1}),EMG_sal{ccount}{1,1}./max(EMG_sal{ccount}{1,1}),250/2,1000,250,'psd','onesided');
