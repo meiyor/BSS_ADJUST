@@ -224,19 +224,19 @@ while ind==0
        %% control amplitude some channels represent an artifact
                     indicator_L=0;
                     indicator_R=0;
-                    if any(EEGL_set{ccount}.data(k,:)>=200)
+                    if any(EEGL_set{ccount}.data(k,:)>=100)
                         EEGL_set{ccount}.data(k,:)=0.01;
                         indicator_L=1;
                     end;
-                    if any(EEGR_set{ccount}.data(k,:)>=200)
+                    if any(EEGR_set{ccount}.data(k,:)>=100)
                         EEGR_set{ccount}.data(k,:)=0.01;
                         indicator_R=1;
                     end;
-                    if any(EEGL_set{ccount}.data(k,:)<=-200)
+                    if any(EEGL_set{ccount}.data(k,:)<=-100)
                         EEGL_set{ccount}.data(k,:)=-0.01;
                         indicator_L=1;
                     end;
-                    if any(EEGR_set{ccount}.data(k,:)<=-200)
+                    if any(EEGR_set{ccount}.data(k,:)<=-100)
                         EEGR_set{ccount}.data(k,:)=-0.01;
                         indicator_R=1;
                     end;
