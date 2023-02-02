@@ -24,8 +24,8 @@ while ind==0
      EEGL_set{ccount}=EEGlabstructure_def(EEGL,EEG{ccount}{2,1}',EEG{ccount}{4,1},EEG{ccount}{6,1},EEG{ccount}{1,1},subj,runind);
      EEGR_set{ccount}=EEGlabstructure_def(EEGR,EEG{ccount}{2,2}',EEG{ccount}{4,2},EEG{ccount}{6,2},EEG{ccount}{1,2},subj,runind);
      if indbout==0
-         EEGL_set{ccount} = pop_eegfiltnew(EEGL_set{ccount},2.1,100,8250);
-         EEGR_set{ccount} = pop_eegfiltnew(EEGR_set{ccount},2.1,100,8250);
+         EEGL_set{ccount} = pop_eegfiltnew(EEGL_set{ccount},0.1,100,8250);
+         EEGR_set{ccount} = pop_eegfiltnew(EEGR_set{ccount},0.1,100,8250);
          for k=1:32
                     t_data=conv((1/2)*ones([1 2]),EEGL_set{ccount}.data(k,:));
                     t_data=detrend(t_data);
@@ -365,6 +365,7 @@ while ind==0
          EEGL_set{ccount}=[];
          EEGR_set{ccount}=[];
      end;
+     clearvars EEG EEGLset EEGR_set PL3_SO PL3_ST PL3_TA PL3_SO PL3_RF SL3_SO SL3_ST SL3_TA SL3_RF PL2_SO PL2_ST PL2_TA PL2_RF
      ckcount=ckcount+1;
 end;
 save([subj '_' runind '_res_vals_OG.mat'],'erspl','itcpl','freql','erspr','itcpr','freqr','tl','tr','accel','thl','thr','tpl','tpr');

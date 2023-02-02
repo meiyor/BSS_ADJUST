@@ -24,8 +24,8 @@ while ind==0
      EEGR_set{ccount}=EEGlabstructure_def(EEGR,EEG{ccount}{2,2}',EEG{ccount}{4,2},EEG{ccount}{6,2},EEG{ccount}{1,2},subj,runind);
      
      if indbout==0
-         EEGL_set{ccount} = pop_eegfiltnew(EEGL_set{ccount},2.1,100,8250);
-         EEGR_set{ccount} = pop_eegfiltnew(EEGR_set{ccount},2.1,100,8250);
+         EEGL_set{ccount} = pop_eegfiltnew(EEGL_set{ccount},0.1,100,8250);
+         EEGR_set{ccount} = pop_eegfiltnew(EEGR_set{ccount},0.1,100,8250);
          for k=1:32
                     t_data=conv((1/2)*ones([1 2]),EEGL_set{ccount}.data(k,:));
                     t_data=detrend(t_data);
