@@ -17,3 +17,4 @@ For executing the artifact rejection using BSS+ADJUST simply run the following c
 ```matlab
 reading_gtec_EKSO_mode('/path_to_EKSO_Data/S9_ekso_modeA_2.mat','modeA_2')
 ```
+Or use the general code to calculate ERSP and CMC that used ASR and ADJUST for eliminating artifacts as the following command
