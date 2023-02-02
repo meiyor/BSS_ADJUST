@@ -1,6 +1,6 @@
 function linearModelExamples
 
-% % Linear model call format
+% %% Linear model call format
 %
 %
 % % Build data
